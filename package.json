@@ -1,0 +1,19 @@
+{
+  "name": "calendar",
+  "version": "1.0.0",
+  "description": "learning Otus js-basic calendar",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sar0868/calendar.git"
+  },
+  "author": "Safarov AR",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sar0868/calendar/issues"
+  },
+  "homepage": "https://github.com/sar0868/calendar#readme"
+}
