@@ -1,16 +1,23 @@
-type Calendar = {
-    date: Date;
-    records: record[];
-  };
+// type Calendar = {
+//     date: Date;
+//     records: record[];
+//   };
   
-  type record = {
-    title: string;
-    status: string;
-    tags: tag[];
-    text: string;
-  };
-  
-  type tag = {
-    name: string;
-  };
+export type Calendar = Map<Date, DayRecords>
+
+export type DayRecords = {
+  timestamp: Date;
+  records: record[];
+}
+
+export type record = {
+  title: string;
+  status: string;
+  tags: tag[];
+  text: string;
+};
+
+export type tag = {
+  name: string;
+};
   
