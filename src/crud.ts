@@ -1,8 +1,8 @@
-import {Calendar, DayRecords, record, tag} from "./calendar"
+import {Task, record, tag} from "./task"
 
 
-type StorageCalendar = {
-  setItem(key: string, value: any): Promise<boolean>;
+export type StorageCalendar = {
+  setItem(task: Task): void;
   getItem(key: string): Promise<string | null>;
   deleteItem(key: string): Promise<boolean>;
   getTasksByTitle(title: string): Promise<record[]>;
