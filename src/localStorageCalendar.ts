@@ -1,7 +1,7 @@
 import {Task, record, tag} from "./task"
 import {StorageCalendar} from "./crud"
 
-class LocalStorageCalendar implements StorageCalendar{
+export class LocalStorageCalendar implements StorageCalendar{
     storage: Storage;
     constructor(){
         this.storage = window.localStorage
