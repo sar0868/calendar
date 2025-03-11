@@ -1,4 +1,4 @@
-import { Task, record, tag } from "./task";
+import { Events, Status, Tag } from "./models";
 
 // export type StorageCalendar = {
 //   setItem(task: Task): void;
@@ -11,11 +11,12 @@ import { Task, record, tag } from "./task";
 // };
 
 export type StorageCalendar = {
-  setItem: (task: Task) => void;
-  getItem: (key: string) => Promise<string | null>;
-  deleteItem: (key: string) => Promise<boolean>;
-  getTasksByTitle: (title: string) => Promise<record[]>;
-  getTasksByStatus: (status: string) => Promise<record[]>;
-  getTasksByDay: (day: string) => Promise<record[]>;
-  getTasksByTag: (tag: string) => Promise<record[]>;
+  // storage: Events[]
+  setEvents(events: Events): void;
+  getEvents(key: string): Promise<Events | null>;
+  deleteEvents(key: string): Promise<boolean>;
+  getEventsByTitle(title: string): Promise<Events[]>;
+  getEventsByStatus(status: Status): Promise<Events[]>;
+  getEventsByDay(day: string): Promise<Events[]>;
+  getEventsByTag(tag: Tag): Promise<Events[]>;
 };
