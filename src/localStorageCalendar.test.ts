@@ -1,8 +1,10 @@
 // import { localStorageCalendar } from "./localStorageCalendar";
 // import { mockWeather } from "./mock.weather";
+import { LocalStorageCalendar } from "./localStorageCalendar";
+import { Events, Status } from "./models";
 
 // /* global global */
-describe.skip("test localStorage", () => {
+describe("test localStorage", () => {
   //   let localStorage;
 
   beforeEach(() => {
@@ -15,7 +17,28 @@ describe.skip("test localStorage", () => {
     //   });
   });
 
-  it.todo("test add data in localStorage");
+  it("test add data in localStorage", () => {
+    const storage = new LocalStorageCalendar();
+    const curentDate = new Date();
+    const event: Events = {
+      date: curentDate,
+      records: [
+        {
+          title: "title",
+          status: Status.PENDING,
+          tags: [
+            {
+              name: "simple",
+            },
+          ],
+          text: "text",
+        },
+      ],
+    };
+    storage.setEvents(event);
+    const expected = storage.getEvents(curentDate.toISOString());
+    expect(expected).toBe(event.records);
+  });
 });
 
 // describe("test get weather", () => {
