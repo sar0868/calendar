@@ -69,13 +69,7 @@ describe("test localStorage", () => {
       ],
     };
     storage.setEvents(event);
-    let expected: Events | null;
-    try {
-      expected = await storage.getEvents(currantDate.toISOString());
-    } catch {
-      expected = null;
-    }
-
+    const expected = storage.getEvents(currantDate.toISOString());
     expect(expected).toBe(event);
   });
 });

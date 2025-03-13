@@ -13,7 +13,7 @@ import { Events, Status, Tag } from "./models";
 export type StorageCalendar = {
   // storage: Events[]
   setEvents(events: Events): void;
-  getEvents(key: string): Promise<Events>;
+  getEvents(key: string): Events;
   deleteEvents(key: string): Promise<boolean>;
   getEventsByTitle(title: string): Promise<Events[]>;
   getEventsByStatus(status: Status): Promise<Events[]>;

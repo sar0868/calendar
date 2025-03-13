@@ -12,18 +12,13 @@ export class LocalStorageCalendar implements StorageCalendar {
     this.storage.setItem(key, JSON.stringify(getRecords));
   }
 
-  getEvents(key: string): Promise<Events> {
-    return new Promise<Events>((resolve, reject) => {
-      // const value = this.storage.getItem(key);
-      if (this.storage.getItem(key)) {
-        resolve({
-          date: new Date(Date.parse(key)),
-          records: JSON.parse(this.storage.getItem(key)),
-        });
-      } else {
-        reject(null);
-      }
-    });
+  getEvents(key: string): Events {
+    const value: string = this.storage.getItem(key);
+    const result: Events = {
+      date: new Date(Date.parse(key)),
+      records: JSON.parse(value),
+    };
+    return value ? result : null;
   }
   deleteEvents(key: string): Promise<boolean> {
     throw new Error("Method not implemented." + key);
