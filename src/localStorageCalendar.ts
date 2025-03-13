@@ -8,29 +8,27 @@ export class LocalStorageCalendar implements StorageCalendar {
   }
   async setEvents(events: Events) {
     const key: string = events.date.toString();
-    const getResult = (el: Events) => el;
-    const records = this.getEvents(key)
-      .then((result) => getResult(result))
-      .catch(() => null);
-    if (records === null) {
+    // const getResult = (el: Events) => el;
+    let getRecords: Record[];
+    this.getEvents(key).then((result) => (getRecords = result.records));
+    if (getRecords === undefined) {
       this.storage.setItem(key, JSON.stringify(events.records));
     } else {
-      const newRecords: Record[] = [...(await records)];
-      newRecords.push(...events.records);
-      this.storage.setItem(key, JSON.stringify(newRecords));
+      getRecords.push(...events.records);
+      this.storage.setItem(key, JSON.stringify(getRecords));
     }
   }
 
-  getEvents(key: string): Promise<Events | null> {
-    return new Promise<Events | null>((resolve, reject) => {
-      const value = async () => this.storage.getItem(key);
-      if (value !== undefined) {
+  getEvents(key: string): Promise<Events> {
+    return new Promise<Events>((resolve, reject) => {
+      const value = this.storage.getItem(key);
+      if (value !== "null") {
         resolve({
           date: new Date(Date.parse(key)),
           records: JSON.parse(this.storage.getItem(key)),
         });
       } else {
-        reject(null);
+        reject(value);
       }
     });
   }

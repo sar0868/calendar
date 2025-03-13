@@ -1,7 +1,7 @@
 // import { localStorageCalendar } from "./localStorageCalendar";
 // import { mockWeather } from "./mock.weather";
 import { LocalStorageCalendar } from "./localStorageCalendar";
-import { Events, Status } from "./models";
+import { Events, Status, Record } from "./models";
 
 // /* global global */
 describe("test localStorage", () => {
@@ -19,9 +19,9 @@ describe("test localStorage", () => {
 
   it("test add data in localStorage", () => {
     const storage = new LocalStorageCalendar();
-    const curentDate = new Date();
+    const currantDate = new Date();
     const event: Events = {
-      date: curentDate,
+      date: currantDate,
       records: [
         {
           title: "title",
@@ -35,9 +35,13 @@ describe("test localStorage", () => {
         },
       ],
     };
+    let addedData: Events;
     storage.setEvents(event);
-    const expected = storage.getEvents(curentDate.toISOString());
-    expect(expected).toBe(event.records);
+    storage
+      .getEvents(currantDate.toISOString())
+      .then((result) => (addedData = result))
+      .catch((value) => value);
+    expect(addedData).toBe(event);
   });
 });
 
