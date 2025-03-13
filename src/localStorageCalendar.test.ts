@@ -1,20 +1,18 @@
 // import { localStorageCalendar } from "./localStorageCalendar";
 // import { mockWeather } from "./mock.weather";
 import { LocalStorageCalendar } from "./localStorageCalendar";
-import { Events, Status, Record } from "./models";
+import { Events, Status } from "./models";
 
 // /* global global */
 describe("test localStorage", () => {
-  //   let localStorage;
+  let localSt: Storage;
 
   beforeEach(() => {
-    localStorage = window.localStorage;
-    global.fetch = jest.fn();
-    // () => {
-    //   return Promise.resolve({
-    //     ok: true,
-    //     json: () => Promise.resolve(""),
-    //   });
+    localSt = window.localStorage;
+  });
+
+  afterEach(() => {
+    window.localStorage = localSt;
   });
 
   it("test add data in localStorage", () => {
@@ -35,35 +33,49 @@ describe("test localStorage", () => {
         },
       ],
     };
-    let addedData: Events;
     storage.setEvents(event);
-    storage
-      .getEvents(currantDate.toISOString())
-      .then((result) => (addedData = result))
-      .catch((value) => value);
-    expect(addedData).toBe(event);
+    expect(storage.lenght()).toBe(1);
+  });
+
+  it("test get data in localStorage: length 0", async () => {
+    const storage = new LocalStorageCalendar();
+    const currantDate = new Date();
+
+    let expected: Events | null;
+    try {
+      expected = await storage.getEvents(currantDate.toISOString());
+    } catch {
+      expected = null;
+    }
+    expect(expected).toBe(null);
+  });
+
+  it("test get data in localStorage", async () => {
+    const storage = new LocalStorageCalendar();
+    const currantDate = new Date();
+    const event: Events = {
+      date: currantDate,
+      records: [
+        {
+          title: "title",
+          status: Status.PENDING,
+          tags: [
+            {
+              name: "simple",
+            },
+          ],
+          text: "text",
+        },
+      ],
+    };
+    storage.setEvents(event);
+    let expected: Events | null;
+    try {
+      expected = await storage.getEvents(currantDate.toISOString());
+    } catch {
+      expected = null;
+    }
+
+    expect(expected).toBe(event);
   });
 });
-
-// describe("test get weather", () => {
-//   let localStorage;
-//   beforeEach(() => {
-//     localStorage = window.localStorage;
-//     global.fetch = jest.fn(() => {
-//       return Promise.resolve({
-//         ok: true,
-//         json: () => Promise.resolve(mockWeather),
-//       });
-//     });
-//   });
-//   afterEach(() => {
-//     jest.clearAllMocks();
-//     window.localStorage = localStorage;
-//   });
-//   it("should return json", async () => {
-//     const result = await getWeather("London");
-
-//     expect(result).toEqual(mockWeather);
-//     expect(fetch).toHaveBeenCalledTimes(1);
-//   });
-// });
