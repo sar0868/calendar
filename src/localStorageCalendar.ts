@@ -1,4 +1,4 @@
-import { Events, Record, Status, Tag } from "./models";
+import { Events, Status, Tag } from "./models";
 import { StorageCalendar } from "./crud";
 
 export class LocalStorageCalendar implements StorageCalendar {
@@ -6,16 +6,19 @@ export class LocalStorageCalendar implements StorageCalendar {
   constructor() {
     this.storage = window.localStorage;
   }
-  setEvents(events: Events) {
+  async setEvents(events: Events) {
     const key: string = events.date.toISOString();
-    let getRecords: Record[];
-    this.storage.setItem(key, JSON.stringify(getRecords));
+    try {
+      await this.storage.setItem(key, JSON.stringify(events.records));
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   getEvents(key: string): Promise<Events> {
     return new Promise<Events>((resolve, reject) => {
-      // const value = this.storage.getItem(key);
-      if (this.storage.getItem(key)) {
+      const value = this.storage.getItem(key);
+      if (value !== null) {
         resolve({
           date: new Date(Date.parse(key)),
           records: JSON.parse(this.storage.getItem(key)),
@@ -40,5 +43,4 @@ export class LocalStorageCalendar implements StorageCalendar {
   getEventsByTag(tag: Tag): Promise<Events[]> {
     throw new Error(`Method not implemented. ${tag}`);
   }
-  lenght = () => this.storage.length;
 }

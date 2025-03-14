@@ -1,23 +1,44 @@
-// import { localStorageCalendar } from "./localStorageCalendar";
-// import { mockWeather } from "./mock.weather";
 import { LocalStorageCalendar } from "./localStorageCalendar";
 import { Events, Status } from "./models";
 
-// /* global global */
+const localStorageMock = (function () {
+  let store = {};
+
+  return {
+    getItem(key: string): string | null {
+      return store[key];
+    },
+
+    setItem(key: string, value: string) {
+      store[key] = value;
+    },
+
+    clear() {
+      store = {};
+    },
+
+    removeItem(key: string) {
+      delete store[key];
+    },
+
+    getAll() {
+      return store;
+    },
+  };
+})();
+
 describe("test localStorage", () => {
-  let localSt: Storage;
+  beforeAll(() => {
+    Object.defineProperty(window, "localStorage", { value: localStorageMock });
+  });
 
   beforeEach(() => {
-    localSt = window.localStorage;
+    window.localStorage.clear();
   });
 
-  afterEach(() => {
-    window.localStorage = localSt;
-  });
-
-  it("test add data in localStorage", () => {
+  it("test add data in localStorage", async () => {
     const storage = new LocalStorageCalendar();
-    const currantDate = new Date();
+    const currantDate = new Date(2025, 2, 14);
     const event: Events = {
       date: currantDate,
       records: [
@@ -33,13 +54,20 @@ describe("test localStorage", () => {
         },
       ],
     };
+
     storage.setEvents(event);
-    expect(storage.lenght()).toBe(1);
+    let expected: Events | null;
+    try {
+      expected = await storage.getEvents(currantDate.toISOString());
+    } catch {
+      expected = null;
+    }
+    expect(expected).toEqual(event);
   });
 
-  it("test get data in localStorage: length 0", async () => {
+  it("test get data in localStorage: empty storage", async () => {
     const storage = new LocalStorageCalendar();
-    const currantDate = new Date();
+    const currantDate = new Date(2025, 2, 14);
 
     let expected: Events | null;
     try {
@@ -52,7 +80,7 @@ describe("test localStorage", () => {
 
   it("test get data in localStorage", async () => {
     const storage = new LocalStorageCalendar();
-    const currantDate = new Date();
+    const currantDate = new Date(2025, 2, 14);
     const event: Events = {
       date: currantDate,
       records: [
@@ -76,6 +104,6 @@ describe("test localStorage", () => {
       expected = null;
     }
 
-    expect(expected).toBe(event);
+    expect(expected).toEqual(event);
   });
 });
