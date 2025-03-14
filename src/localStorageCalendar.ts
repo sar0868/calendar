@@ -8,17 +8,20 @@ export class LocalStorageCalendar implements StorageCalendar {
   }
   setEvents(events: Events) {
     const key: string = events.date.toISOString();
-    let getRecords: Record[];
+    const getRecords: Record[] = events.records;
     this.storage.setItem(key, JSON.stringify(getRecords));
   }
 
   getEvents(key: string): Events {
     const value: string = this.storage.getItem(key);
-    const result: Events = {
-      date: new Date(Date.parse(key)),
-      records: JSON.parse(value),
-    };
-    return value ? result : null;
+    if (value !== undefined) {
+      const result: Events = {
+        date: new Date(Date.parse(key)),
+        records: JSON.parse(value),
+      };
+      return result;
+    }
+    return null;
   }
   deleteEvents(key: string): Promise<boolean> {
     throw new Error("Method not implemented." + key);
@@ -35,5 +38,4 @@ export class LocalStorageCalendar implements StorageCalendar {
   getEventsByTag(tag: Tag): Promise<Events[]> {
     throw new Error(`Method not implemented. ${tag}`);
   }
-  lenght = () => this.storage.length;
 }
