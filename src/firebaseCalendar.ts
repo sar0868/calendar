@@ -1,7 +1,7 @@
 import { Events, Status, Tag } from "./models";
 import { StorageCalendar } from "./crud";
 
-export class LocalStorageCalendar implements StorageCalendar {
+export class FirebaseCalendar implements StorageCalendar {
   storage: Storage;
   constructor() {
     this.storage = window.localStorage;

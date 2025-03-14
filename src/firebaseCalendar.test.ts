@@ -1,4 +1,4 @@
-import { LocalStorageCalendar } from "./localStorageCalendar";
+import { FirebaseCalendar } from "./firebaseCalendar";
 import { Events, Status } from "./models";
 
 const localStorageMock = (function () {
@@ -28,7 +28,7 @@ const localStorageMock = (function () {
 })();
 
 describe("test localStorage", () => {
-  let storage: LocalStorageCalendar;
+  let storage: FirebaseCalendar;
 
   beforeAll(() => {
     Object.defineProperty(window, "localStorage", { value: localStorageMock });
@@ -36,7 +36,7 @@ describe("test localStorage", () => {
 
   beforeEach(() => {
     window.localStorage.clear();
-    storage = new LocalStorageCalendar();
+    storage = new FirebaseCalendar();
   });
 
   it("test add data in localStorage", async () => {
