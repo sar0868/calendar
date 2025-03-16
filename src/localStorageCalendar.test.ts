@@ -29,6 +29,37 @@ const localStorageMock = (function () {
 
 describe("test localStorage", () => {
   let storage: LocalStorageCalendar;
+  const event1: Events = {
+    date: new Date(2025, 2, 14),
+    records: [
+      {
+        title: "title",
+        status: Status.PENDING,
+        tags: [
+          {
+            name: "simple",
+          },
+        ],
+        text: "text",
+      },
+    ],
+  };
+
+  const event2: Events = {
+    date: new Date(2024, 2, 14),
+    records: [
+      {
+        title: "title",
+        status: Status.PENDING,
+        tags: [
+          {
+            name: "simple",
+          },
+        ],
+        text: "text",
+      },
+    ],
+  };
 
   beforeAll(() => {
     Object.defineProperty(window, "localStorage", { value: localStorageMock });
@@ -40,52 +71,20 @@ describe("test localStorage", () => {
   });
 
   it("test add data in localStorage", async () => {
-    const currantDate = new Date(2025, 2, 14);
-    const event1: Events = {
-      date: currantDate,
-      records: [
-        {
-          title: "title",
-          status: Status.PENDING,
-          tags: [
-            {
-              name: "simple",
-            },
-          ],
-          text: "text",
-        },
-      ],
-    };
-
-    const event2: Events = {
-      date: new Date(2024, 2, 14),
-      records: [
-        {
-          title: "title2",
-          status: Status.PENDING,
-          tags: [
-            {
-              name: "simple",
-            },
-          ],
-          text: "text",
-        },
-      ],
-    };
-
     storage.setEvents(event1);
     storage.setEvents(event2);
+    const date1: string = new Date(2025, 2, 14).toISOString();
+    const date2: string = new Date(2024, 2, 14).toISOString();
 
     let expected: Events | null;
     let expected2: Events | null;
     try {
-      expected = await storage.getEvents(currantDate.toISOString());
+      expected = await storage.getEvents(date1);
     } catch {
       expected = null;
     }
     try {
-      const date2 = new Date(2024, 2, 14);
-      expected2 = await storage.getEvents(date2.toISOString());
+      expected2 = await storage.getEvents(date2);
     } catch {
       expected2 = null;
     }
@@ -108,23 +107,7 @@ describe("test localStorage", () => {
   });
 
   it("test get data in localStorage: don't found date", async () => {
-    const currantDate = new Date(2025, 2, 14);
-    const event: Events = {
-      date: currantDate,
-      records: [
-        {
-          title: "title",
-          status: Status.PENDING,
-          tags: [
-            {
-              name: "simple",
-            },
-          ],
-          text: "text",
-        },
-      ],
-    };
-    storage.setEvents(event);
+    storage.setEvents(event1);
 
     let expected: Events | null;
     try {
@@ -135,5 +118,19 @@ describe("test localStorage", () => {
     }
 
     expect(expected).toBeNull();
+  });
+
+  it("test delete data in localStorage", async () => {
+    const key1: string = new Date(2025, 2, 14).toISOString();
+    storage.setEvents(event1);
+
+    storage.deleteEvents(key1);
+    let expected: Events | null;
+    try {
+      expected = await storage.getEvents(key1);
+    } catch {
+      expected = null;
+    }
+    expect(expected).toEqual(null);
   });
 });

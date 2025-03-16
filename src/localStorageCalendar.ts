@@ -28,8 +28,8 @@ export class LocalStorageCalendar implements StorageCalendar {
       }
     });
   }
-  deleteEvents(key: string): Promise<boolean> {
-    throw new Error("Method not implemented." + key);
+  deleteEvents(key: string) {
+    this.storage.removeItem(key);
   }
   getEventsByTitle(title: string): Promise<Events[]> {
     throw new Error(`Method not implemented.${title}`);

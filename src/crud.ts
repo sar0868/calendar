@@ -14,7 +14,7 @@ export type StorageCalendar = {
   // storage: Events[]
   setEvents(events: Events): void;
   getEvents(key: string): Promise<Events>;
-  deleteEvents(key: string): Promise<boolean>;
+  deleteEvents(key: string): void;
   getEventsByTitle(title: string): Promise<Events[]>;
   getEventsByStatus(status: Status): Promise<Events[]>;
   getEventsByDay(day: string): Promise<Events[]>;
