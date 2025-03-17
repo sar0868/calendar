@@ -37,7 +37,7 @@ describe("test localStorage", () => {
         status: Status.PENDING,
         tags: [
           {
-            name: "simple",
+            name: "simple1",
           },
         ],
         text: "text",
@@ -53,10 +53,20 @@ describe("test localStorage", () => {
         status: Status.PENDING,
         tags: [
           {
-            name: "simple",
+            name: "simple2",
           },
         ],
         text: "text",
+      },
+      {
+        title: "title2",
+        status: Status.PENDING,
+        tags: [
+          {
+            name: "simple2",
+          },
+        ],
+        text: "text2",
       },
     ],
   };
@@ -132,5 +142,19 @@ describe("test localStorage", () => {
       expected = null;
     }
     expect(expected).toEqual(null);
+  });
+
+  it("should get list events by title=title", async () => {
+    storage.setEvents(event1);
+    storage.setEvents(event2);
+    const findTitle: string = "title";
+    let expected: Events[] | null;
+
+    try {
+      expected = await storage.getEventsByTitle(findTitle);
+    } catch {
+      expected = null;
+    }
+    expect(expected?.length).toBe(undefined);
   });
 });

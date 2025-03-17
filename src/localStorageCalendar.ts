@@ -3,6 +3,7 @@ import { StorageCalendar } from "./crud";
 
 export class LocalStorageCalendar implements StorageCalendar {
   storage: Storage;
+  readonly length: number;
   constructor() {
     this.storage = window.localStorage;
   }
@@ -31,8 +32,30 @@ export class LocalStorageCalendar implements StorageCalendar {
   deleteEvents(key: string) {
     this.storage.removeItem(key);
   }
-  getEventsByTitle(title: string): Promise<Events[]> {
-    throw new Error(`Method not implemented.${title}`);
+  async getEventsByTitle(title: string): Promise<Events[]> {
+    const result: Events[] = [];
+    for (const k in Object.keys(this.storage)) {
+      // for (let i = 0; i < this.storage.length; i++) {
+      //   const k: string = this.storage.key(i);
+      let curEvent: Events;
+      try {
+        curEvent = await this.getEvents(k);
+      } catch {
+        continue;
+      }
+      for (const record of curEvent.records) {
+        if (record.title === title) {
+          result.push(curEvent);
+        }
+      }
+    }
+    return new Promise<Events[]>((resolve, reject) => {
+      if (result.length > 0) {
+        resolve(result);
+      } else {
+        reject(null);
+      }
+    });
   }
   getEventsByStatus(status: Status): Promise<Events[]> {
     throw new Error(`Method not implemented. ${status}`);
