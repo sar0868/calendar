@@ -32,21 +32,29 @@ export class LocalStorageCalendar implements StorageCalendar {
   deleteEvents(key: string) {
     this.storage.removeItem(key);
   }
+
   async getEventsByTitle(title: string): Promise<Events[]> {
     const result: Events[] = [];
-    for (const k in Object.keys(this.storage)) {
-      // for (let i = 0; i < this.storage.length; i++) {
-      //   const k: string = this.storage.key(i);
+    // for (const k in Object.keys(this.storage)) {
+    for (let i = 0; i < this.storage.length; i++) {
+      const k: string = this.storage.key(i);
       let curEvent: Events;
       try {
         curEvent = await this.getEvents(k);
       } catch {
         continue;
       }
+      const tempEvent: Events = {
+        date: curEvent.date,
+        records: [],
+      };
       for (const record of curEvent.records) {
         if (record.title === title) {
-          result.push(curEvent);
+          tempEvent.records.push(record);
         }
+      }
+      if (tempEvent.records.length !== 0) {
+        result.push(tempEvent);
       }
     }
     return new Promise<Events[]>((resolve, reject) => {

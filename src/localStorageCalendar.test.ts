@@ -1,31 +1,31 @@
 import { LocalStorageCalendar } from "./localStorageCalendar";
 import { Events, Status } from "./models";
 
-const localStorageMock = (function () {
-  let store = {};
+// const localStorageMock = (function () {
+//   let store = {};
 
-  return {
-    getItem(key: string): string | null {
-      return store[key];
-    },
+//   return {
+//     getItem(key: string): string | null {
+//       return store[key];
+//     },
 
-    setItem(key: string, value: string) {
-      store[key] = value;
-    },
+//     setItem(key: string, value: string) {
+//       store[key] = value;
+//     },
 
-    clear() {
-      store = {};
-    },
+//     clear() {
+//       store = {};
+//     },
 
-    removeItem(key: string) {
-      delete store[key];
-    },
+//     removeItem(key: string) {
+//       delete store[key];
+//     },
 
-    getAll() {
-      return store;
-    },
-  };
-})();
+//     getAll() {
+//       return store;
+//     },
+//   };
+// })();
 
 describe("test localStorage", () => {
   let storage: LocalStorageCalendar;
@@ -72,7 +72,7 @@ describe("test localStorage", () => {
   };
 
   beforeAll(() => {
-    Object.defineProperty(window, "localStorage", { value: localStorageMock });
+    // Object.defineProperty(window, "localStorage", { value: localStorageMock });
   });
 
   beforeEach(() => {
@@ -155,6 +155,10 @@ describe("test localStorage", () => {
     } catch {
       expected = null;
     }
-    expect(expected?.length).toBe(undefined);
+    // console.log(...expected);
+    expect(expected?.length).toBe(2);
+    if (expected !== null) {
+      expect(expected[1].records.length).toBe(1);
+    }
   });
 });
